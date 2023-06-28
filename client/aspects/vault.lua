@@ -2,7 +2,11 @@ local debug = CG.debug
 --local chosenbank = FH.chosenbank
 local vault = BK.banks.alta.vaultdoor
 local door = nil
-local drill = {
+local drille = {
+    spawned = false,
+    obj = nil
+}
+local drillt = {
     spawned = false,
     obj = nil
 }
@@ -25,21 +29,12 @@ local function spawnvaultzone()
                     return distance < 2.0
                 end,
                 onSelect = function()
-                    lib.notify({
-                        id = 'caught_alert',
-                        title = 'You did a hack',
-                        description = 'good job criminal guy',
-                        position = CG.notify.position,
-                        style = {
-                            backgroundColor = CG.notify.background,
-                            color = CG.notify.textcolor,
-                            ['.description'] = {
-                                color = CG.notify.desccolor
-                            }
-                        },
-                        icon = CG.notify.icon,
-                        iconColor = CG.notify.iconcolor
-                    })
+                    TriggerEvent('spawnthermaldrill')
+                    Wait(5000)
+                    DeleteEntity(drillt.obj)
+                    drillt.obj = nil
+                    drillt.spawned = false
+                    TriggerEvent('openvault')
                 end
             },
             {
@@ -50,7 +45,12 @@ local function spawnvaultzone()
                     return distance < 2.0
                 end,
                 onSelect = function()
-                    --TriggerEvent('spawnelectricdrill')
+                    TriggerEvent('spawnelectricdrill')
+                    Wait(5000)
+                    DeleteEntity(drille.obj)
+                    drille.obj = nil
+                    drille.spawned = false
+                    TriggerEvent('openvault')
                 end
             },
         }
@@ -62,16 +62,16 @@ AddEventHandler('spawnelectricdrill', function()
     -- for testing, changed to alta [BK.banks.chosenbank.cameras]
     local coords = BK.banks.alta.vaultdoor.drill
     local head = BK.banks.alta.vaultdoor.drillhead
-    if drill.spawned then return end
+    if drille.spawned then return end
 
-    local tool = CreateObject(
+    local toole = CreateObject(
         elecdrill, coords.x, coords.y, coords.z, 
         true, true, true)
-    SetEntityHeading(tool, head)
-    FreezeEntityPosition(tool, true)
+    SetEntityHeading(toole, head)
+    FreezeEntityPosition(toole, true)
 
-    drill.obj = elecdrill
-    drill.spawned = true
+    drille.obj = toole
+    drille.spawned = true
 end)
 
 AddEventHandler('spawnthermaldrill', function()
@@ -79,43 +79,56 @@ AddEventHandler('spawnthermaldrill', function()
     -- for testing, changed to alta [BK.banks.chosenbank.cameras]
     local coords = BK.banks.alta.vaultdoor.drill
     local head = BK.banks.alta.vaultdoor.drillhead
-    if drill.spawned then return end
+    if drillt.spawned then return end
 
-    local tool = CreateObject(
+    local toolt = CreateObject(
         thermdrill, coords.x-0.34, coords.y, coords.z-0.4, 
         true, true, true)
-    SetEntityHeading(tool, head)
-    FreezeEntityPosition(tool, true)
+    SetEntityHeading(toolt, head)
+    FreezeEntityPosition(toolt, true)
 
-    drill.obj = tool
-    drill.spawned = true
+    drillt.obj = toolt
+    drillt.spawned = true
 end)
 
 AddEventHandler('openvault', function()
-    local location = vault.loc
-    door = GetClosestObjectOfType(location.x, location.y, location.z, 10, vault.hash, false, false, false)
-    SetEntityHeading(door, vault.head)
-    local headstart = vault.head
-    local headend = vault.headend
-    if headstart ~= headend then
-        while headstart ~= headend do
-            Wait(1)
-            SetEntityHeading(door, headstart -1)
-            headstart = GetEntityHeading(door)
-        end
-        SetEntityHeading(door, headend)
-    end
+    door = vault.loc
+    local obj = GetClosestObjectOfType(door.x, door.y, door.z, 10, vault.hash, false, false, false)
+    local count = 0
+    SetEntityHeading(obj, vault.head)
+    repeat
+        local rotation = GetEntityHeading(obj) - 0.05
+        SetEntityHeading(obj, rotation)
+        count = count + 1
+        Wait(1)
+    until count == 2000
+    FreezeEntityPosition(obj, true)
+end)
+
+AddEventHandler('closevault', function()
+    door = vault.loc
+    local obj = GetClosestObjectOfType(door.x, door.y, door.z, 10, vault.hash, false, false, false)
+    local count = 0
+    SetEntityHeading(obj, vault.headend)
+    repeat
+        local rotation = GetEntityHeading(obj) + 0.05
+        SetEntityHeading(obj, rotation)
+        count = count + 1
+        Wait(1)
+    until count == 2000
+    FreezeEntityPosition(obj, true)
 end)
 
 RegisterCommand('bvlt', function()
     spawnvaultzone()
-    TriggerEvent('spawnthermaldrill')
-    Wait(5000)
-    DeleteEntity(drill.obj)
-    drill.obj = nil
-    drill.spawned = false
 end, false)
 
-RegisterCommand('bdoor', function()
+RegisterCommand('bdoor1', function()
     TriggerEvent('openvault')
+    Wait(1)
+end, false)
+
+RegisterCommand('bdoor2', function()
+    TriggerEvent('closevault')
+    Wait(1)
 end, false)

@@ -1,10 +1,28 @@
 local debug = CG.debug
 --local chosenbank = FH.chosenbank
+local hacked = false
+local vaultopen = false
+local vaultmoving = false
 
-local function spawnsecpadzone()
-    local coords = BK.banks.alta.secsystem.loc
-    local head = BK.banks.alta.secsystem.head
-    local size = BK.banks.alta.secsystem.size
+local function cooldown()
+end
+
+local function hackpad()
+    if hacked == true then return end
+    if not hacked then
+        local success = lib.skillCheck({'easy', 'easy'}, {'e'})
+        if success then 
+            hacked = true
+        else
+            hacked = false
+        end
+    end
+end
+
+local function spawnsecpadzone1()
+    local coords = BK.banks.alta.secsystemoutside.loc
+    local head = BK.banks.alta.secsystemoutside.head
+    local size = BK.banks.alta.secsystemoutside.size
     exports.ox_target:addBoxZone({
         coords = coords,
         size = size,
@@ -12,53 +30,100 @@ local function spawnsecpadzone()
         debug = debug,
         options = {
             {
-                name = 'secpad_hack',
+                name = 'secpad_hack1',
                 icon = 'fa-solid fa-laptop-file',
                 label = 'Hack Securitypad',
                 canInteract = function(_, distance)
-                    return distance < 2.0
+                    return distance < 2.0 and not hacked
                 end,
                 onSelect = function()
-                    lib.notify({
-                        id = 'caught_alert',
-                        title = 'You did a hack',
-                        description = 'good job criminal guy',
-                        position = CG.notify.position,
-                        style = {
-                            backgroundColor = CG.notify.background,
-                            color = CG.notify.textcolor,
-                            ['.description'] = {
-                                color = CG.notify.desccolor
-                            }
-                        },
-                        icon = CG.notify.icon,
-                        iconColor = CG.notify.iconcolor
-                    })
+                    hackpad()
                 end
             },
             {
-                name = 'secpad_card',
+                name = 'secpad_card1',
                 icon = 'fa-solid fa-id-card-clip',
                 label = 'Use Manager\'s card',
                 canInteract = function(_, distance)
-                    return distance < 2.0
+                    return distance < 2.0 and not hacked
                 end,
                 onSelect = function()
-                    lib.notify({
-                        id = 'caught_alert',
-                        title = 'You did a hack',
-                        description = 'good job criminal guy',
-                        position = CG.notify.position,
-                        style = {
-                            backgroundColor = CG.notify.background,
-                            color = CG.notify.textcolor,
-                            ['.description'] = {
-                                color = CG.notify.desccolor
-                            }
-                        },
-                        icon = CG.notify.icon,
-                        iconColor = CG.notify.iconcolor
-                    })
+                    
+                end
+            },
+
+            {
+                name = 'secpad_vltopen1',
+                icon = 'fa-solid fa-door-open',
+                label = 'Open Vault',
+                canInteract = function(_, distance)
+                    return distance < 2.0 and hacked and not vaultmoving and not vaultopen
+                end,
+                onSelect = function()
+                    vaultmoving = true
+                    TriggerEvent('openvault')
+                    Wait(20000)
+                    vaultmoving = false
+                    vaultopen = true
+                end
+            },
+            {
+                name = 'secpad_vltclose1',
+                icon = 'fa-solid fa-door-closed',
+                label = 'Close Vault',
+                canInteract = function(_, distance)
+                    return distance < 2.0 and hacked and not vaultmoving and vaultopen
+                end,
+                onSelect = function()
+                    vaultmoving = true
+                    TriggerEvent('closevault')
+                    Wait(20000)
+                    vaultmoving = false
+                    vaultopen = false
+                end
+            },
+        }
+    })
+end
+
+local function spawnsecpadzone2()
+    local coords = BK.banks.alta.secsysteminside.loc
+    local head = BK.banks.alta.secsysteminside.head
+    local size = BK.banks.alta.secsysteminside.size
+    exports.ox_target:addBoxZone({
+        coords = coords,
+        size = size,
+        rotation = head,
+        debug = debug,
+        options = {
+            {
+                name = 'secpad_vltopen2',
+                icon = 'fa-solid fa-door-open',
+                label = 'Open Vault',
+                canInteract = function(_, distance)
+                    return distance < 2.0 and hacked and not vaultmoving and not vaultopen
+                end,
+                onSelect = function()
+                    vaultmoving = true
+                    TriggerEvent('openvault')
+                    Wait(20000)
+                    vaultmoving = false
+                    vaultopen = true
+                end
+            },
+            {
+                name = 'secpad_vltclose2',
+                icon = 'fa-solid fa-door-closed',
+                label = 'Close Vault',
+                canInteract = function(_, distance)
+                    return distance < 2.0 and hacked and not vaultmoving and vaultopen
+                end,
+                onSelect = function()
+                    vaultmoving = true
+                    TriggerEvent('closevault')
+                    Wait(20000)
+                    vaultmoving = false
+                    vaultopen = false
                 end
             },
         }
@@ -66,5 +131,6 @@ local function spawnsecpadzone()
 end
 
 RegisterCommand('bsec', function()
-    spawnsecpadzone()
+    spawnsecpadzone1()
+    spawnsecpadzone2()
 end, false)
