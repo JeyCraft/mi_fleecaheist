@@ -3,7 +3,6 @@ CG.debug = true
 
 CG.options = {
     cameras = true,
-    secsystem = true,
     manager = true
 }
 
