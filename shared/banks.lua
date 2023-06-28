@@ -12,7 +12,7 @@ BK.banks  = {
         camzoneinside = {
             loc = vec3(308.449, -279.66, 54.164),
             head = 157.843,
-            size = vec3(3, 3, 3),
+            size = vec3(2, 3, 3),
         },
         secsystem = {
             loc = vec3(308.449, -279.66, 54.164),
