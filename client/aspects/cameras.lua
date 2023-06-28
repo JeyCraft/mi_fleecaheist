@@ -2,7 +2,13 @@ local debug = CG.debug
 --local chosenbank = FH.chosenbank
 local allow = CG.options.cameras
 local powered = true
+local camzone1, camzone2
+
 local camera = {
+    spawned = false,
+    obj = nil
+}
+local camerapad = {
     spawned = false,
     obj = nil
 }
@@ -50,7 +56,7 @@ local function spawncamerazoneoutside()
     local coords = BK.banks.alta.camzoneoutside.loc
     local head = BK.banks.alta.camzoneoutside.head
     local size = BK.banks.alta.camzoneoutside.size
-    local camzoneoutside = lib.zones.box({
+    camzone1 = exports.ox_target:addBoxZone({
         coords = coords,
         size = size,
         rotation = head,
@@ -67,7 +73,7 @@ local function spawncamerazoneinside()
     local coords = BK.banks.alta.camzoneinside.loc
     local head = BK.banks.alta.camzoneinside.head
     local size = BK.banks.alta.camzoneinside.size
-    local camzoneinside = lib.zones.box({
+    camzone2 = exports.ox_target:addBoxZone({
         coords = coords,
         size = size,
         rotation = head,
@@ -78,10 +84,43 @@ local function spawncamerazoneinside()
     })
 end
 
+local function spawncamerapad()
+    if not allow then return end
+    local elecpad = lib.requestModel(joaat('ch_prop_ch_fuse_box_01a'))
+    -- for testing, changed to alta [BK.banks.chosenbank.cameracontrol]
+    local coords = BK.banks.alta.cameracontrol
+    if camerapad.spawned then return end
+
+    local campad = CreateObject(
+        elecpad, coords.x, coords.y, coords.z, 
+        true, true, true)
+    SetEntityHeading(campad, coords.w)
+    FreezeEntityPosition(campad, true)
+
+    camerapad.obj = campad
+    camerapad.spawned = true
+
+    local pad_options = {
+        {
+            name = 'secpad',
+            label = 'Disable camera system',
+            icon = 'fa-solid fa-video',
+            canInteract = function(_, distance)
+                return distance < 2.5 and powered
+            end,
+            onSelect = function()
+                exports.ox_target:removeZone(camzone1)
+                exports.ox_target:removeZone(camzone2)
+            end
+        }
+    }
+    exports.ox_target:addLocalEntity(camerapad.obj, pad_options)
+end
 
 
 RegisterCommand('bcam', function()
     spawncameras()
+    spawncamerapad()
     spawncamerazoneoutside()
     spawncamerazoneinside()
 end, false)

@@ -14,6 +14,7 @@ option to open / close vault door with inside / outside pad
 BK.banks  = {
     alta = {
         camera = vec4(271.758, -309.673, 57.025, 70.00),
+        cameracontrol = vec4(276.055, -308.707, 49.864, 340.00),
         camzoneoutside = {
             loc = vec3(290.500, -317.200, 50.500),
             head = 70,
@@ -42,16 +43,15 @@ BK.banks  = {
             headend = 149.865, -- head - 100.00
             drill = vec3(311.810, -283.530, 54.303),
             drillhead = 70.000
-        }
-
-        --[[
-        manager = {
-            vec4(),
-            vec4(),
-            vec4()
         },
-
-        termpad = vec4()
-        ]]
+        manager = {
+            ped = 'a_f_y_business_01',
+            anim = 'WORLD_HUMAN_DRINKING_FACILITY',
+            loc = {
+                [1] = vec4(316.241, -282.126, 54.164, 64.575),
+                [2] = vec4(289.563, -318.885, 49.864, 158.638),
+                [3] = vec4(303.659, -276.756, 54.166, 45.574)
+            }
+        },
     }
 }
