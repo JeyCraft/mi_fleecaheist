@@ -19,6 +19,12 @@ local trollys3 = {
     obj = nil
 }
 
+local function setanimdict(dict)
+    while (not HasAnimDictLoaded(dict) ) do
+        RequestAnimDict(dict)
+        Citizen.Wait(5)
+    end
+end 
 
 local function spawntrolly1()
     local loc = BK.banks.alta.money.loc
@@ -120,63 +126,49 @@ local function spawntrolly3()
 end
 
 AddEventHandler('mifh:anim:takemoney', function(object)
-    local animdict = lib.requestAnimDict('anim@heists@ornate_bank@grab_cash', 100)
-    local animplayer = lib.requestAnimSet('grab', 100)
-    local animbag = lib.requestAnimSet('bag_grab', 100)
-    local animcart = lib.requestAnimSet('cart_cash_dissapear', 100)
-
-    local animdict = 'anim@heists@ornate_bank@grab_cash'
-    while not HasAnimDictLoaded(animdict) or HasModelLoaded('hei_p_m_bag_var22_arm_s') do
-        RequestAnimDict(animdict)
-        RequestModel("hei_p_m_bag_var22_arm_s")
-        Citizen.Wait(100)
-    end
-
-    local player = PlayerPedId()
-    TaskGoStraightToCoord(player, object.x, object.y, object.z, 1.0, 3000, object.w, 1.0)
-    Citizen.Wait(1500)
-
-    local playercoord, playerrot = GetEntityCoords(player), GetEntityRotation(player)
-    local objcoords = GetEntityCoords(object)
-    local animpos = GetAnimInitialOffsetPosition(
-        animdict, 'grab', objcoords.x, objcoords.y, objcoords.z, 
-        objcoords.x, objcoords.y, objcoords.z, 0, 2)
-    local netscene = NetworkCreateSynchronisedScene(
-        animpos.x, animpos.y, animpos.z, 
-        playerrot.x, playerrot.y, player.z, 2, false, false, 1065353216, 0, 1.3)
-    local bag = CreateObject(GetHashKey("hei_p_m_bag_var22_arm_s"), 
-    playercoord.x, playercoord.y, playercoord.z, true, true, false)
-
-    NetworkAddPedToSynchronisedScene(player, netscene, animdict, 'grab', 1.5, -4.0, 1, 16, 1148846080, 0)
-    NetworkAddEntityToSynchronisedScene(bag, netscene, animdict, 'bag_grab', 4.0, -8.0, 1)
-    NetworkAddEntityToSynchronisedScene(object, netscene, animdict, 'cart_cash_dissapear', 4.0, -8.0, 1)
-    NetworkStartSynchronisedScene(netscene)
-    Citizen.Wait(GetAnimDuration(animdict, "grab") * 1000) -- 47.93 secs
-    NetworkStopSynchronisedScene(netscene)
+    
 end)
 
-RegisterCommand('trolley', function()
-    --[[
-    while not HasAnimDictLoaded(animdict) or
-        not HasModelLoaded(bagmodel) or
-        not HasModelLoaded(trolleymodel) do
-        Citizen.Wait(100)
-    end
+--[[
+    "anim@heists@ornate_bank@grab_cash", "intro"
+    "anim@heists@ornate_bank@grab_cash", "bag_intro"
+    "anim@heists@ornate_bank@grab_cash", "grab"
+    "anim@heists@ornate_bank@grab_cash", "bag_grab"
+    "anim@heists@ornate_bank@grab_cash", "cart_cash_dissapear"
+    "anim@heists@ornate_bank@grab_cash", "exit"
+    "anim@heists@ornate_bank@grab_cash", "bag_exit"
+]]
+
+
+
+RegisterCommand('anim', function()
+    -- data
+    local player = GetPlayerPed(-1)
+    local plyrcrd, plyrrot = GetEntityCoords(player), GetEntityRotation(player)
+    -- anims
+    local bag = lib.requestModel('hei_p_m_bag_var22_arm_s', 100)
+    local trolly = lib.requestModel('hei_prop_hei_cash_trolly_01', 100)
+    local grabcash = lib.requestAnimDict('anim@heists@ornate_bank@grab_cash', 100)
+    -- models
+    local mod_bag = CreateObject(bag, plyrcrd.x, plyrcrd.y, plyrcrd.z, true, true, false)
+    local mod_trolly = CreateObject(trolly, plyrcrd.x, plyrcrd.y, plyrcrd.z, true, true, false)
+    -- netscene
+    local netscene = NetworkCreateSynchronisedScene(
+        plyrcrd.x, plyrcrd.y, plyrcrd.z-0.52, 
+        plyrrot.x, plyrrot.y, plyrrot.z, 
+        2, false, false, 1065353216, 0, 1.3)
+    -- add to netscene
     FreezeEntityPosition(player, true)
-    NetworkAddPedToSynchronisedScene(player, netScene, animdict, "grab", 1.5, -4.0, 1, 16, 1148846080, 0)
-    local bag = CreateObject(bagmodel, playerloc.x, playerloc.y, playerloc.z-1, true, true, false)
-    NetworkAddEntityToSynchronisedScene(bag, netScene, animdict, "bag_grab", 4.0, -8.0, 1)
-    local trolly = CreateObject(trolleymodel, playerloc.x, playerloc.y, playerloc.z-1, true, true, false)
-    NetworkAddEntityToSynchronisedScene(trolly, netScene, animdict, "cart_cash_dissapear", 4.0, -8.0, 1)
-    NetworkStartSynchronisedScene(netScene)
-    Citizen.Wait(GetAnimDuration(animdict, "grab") * 1000) -- 47.93 secs
-    NetworkStopSynchronisedScene(netScene)
-    DeleteObject(bag)
-    DeleteObject(trolly)
+    NetworkAddPedToSynchronisedScene(player, netscene, grabcash, "grab", 1.5, -4.0, 1, 16, 1148846080, 0)
+    NetworkAddEntityToSynchronisedScene(mod_bag, netscene, grabcash, "bag_grab", 4.0, -8.0, 1)
+    NetworkAddEntityToSynchronisedScene(mod_trolly, netscene, grabcash, "cart_cash_dissapear", 4.0, -8.0, 1)
+    -- start scene
+    NetworkStartSynchronisedScene(netscene)
+    Citizen.Wait(37000) -- 47.93 secs
+    NetworkStopSynchronisedScene(netscene)
+    DeleteObject(mod_bag)
+    DeleteObject(mod_trolly)
     FreezeEntityPosition(player, false)
-    ]]
-    spawntrolly1()
-    spawntrolly2()
-    spawntrolly3()
+
 end, false)
 
