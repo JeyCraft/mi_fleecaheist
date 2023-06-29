@@ -1,9 +1,8 @@
 local debug = CG.debug
 --local chosenbank = FH.chosenbank
 local allow = CG.options.cameras
-local powered = true
-local camzone1, camzone2
-
+local system = true
+local cam1, cam2
 local camera = {
     spawned = false,
     obj = nil
@@ -52,11 +51,10 @@ end
 
 local function spawncamerazoneoutside()
     if not allow then return end
-    if not powered then return end
     local coords = BK.banks.alta.camzoneoutside.loc
     local head = BK.banks.alta.camzoneoutside.head
     local size = BK.banks.alta.camzoneoutside.size
-    camzone1 = exports.ox_target:addBoxZone({
+    cam1 = lib.zones.box({
         coords = coords,
         size = size,
         rotation = head,
@@ -69,11 +67,10 @@ end
 
 local function spawncamerazoneinside()
     if not allow then return end
-    if not powered then return end
     local coords = BK.banks.alta.camzoneinside.loc
     local head = BK.banks.alta.camzoneinside.head
     local size = BK.banks.alta.camzoneinside.size
-    camzone2 = exports.ox_target:addBoxZone({
+    cam2 = lib.zones.box({
         coords = coords,
         size = size,
         rotation = head,
@@ -106,11 +103,12 @@ local function spawncamerapad()
             label = 'Disable camera system',
             icon = 'fa-solid fa-video',
             canInteract = function(_, distance)
-                return distance < 2.5 and powered
+                return distance < 2.5 and system
             end,
             onSelect = function()
-                exports.ox_target:removeZone(camzone1)
-                exports.ox_target:removeZone(camzone2)
+                system = false
+                cam1:remove()
+                cam2:remove()
             end
         }
     }
@@ -121,6 +119,15 @@ end
 RegisterCommand('bcam', function()
     spawncameras()
     spawncamerapad()
-    spawncamerazoneoutside()
-    spawncamerazoneinside()
+    
+    Citizen.CreateThread(function()
+        if not system then
+            return nil
+        else
+            spawncamerazoneoutside()
+            spawncamerazoneinside()
+        end
+        Citizen.Wait(100)
+    end)
 end, false)
+
