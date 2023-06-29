@@ -1,6 +1,7 @@
 local debug = CG.debug
 --local chosenbank = FH.chosenbank
 local hacked = false
+local failed = false
 local vaultopen = false
 local vaultmoving = false
 
@@ -10,11 +11,19 @@ end
 local function hackpad()
     if hacked == true then return end
     if not hacked then
-        local success = lib.skillCheck({'easy', 'easy'}, {'e'})
+        local success = lib.skillCheck({'medium', 'medium', 'hard'}, {'q', 'w', 'e'})
         if success then 
             hacked = true
+            vaultmoving = true
+            TriggerEvent('openvault')
+            TriggerEvent('mifh:vault:trollys')
+            Wait(20000)
+            vaultmoving = false
+            vaultopen = true
         else
             hacked = false
+            failed = true
+            
         end
     end
 end
@@ -34,7 +43,7 @@ local function spawnsecpadzone1()
                 icon = 'fa-solid fa-laptop-file',
                 label = 'Hack Securitypad',
                 canInteract = function(_, distance)
-                    return distance < 2.0 and not hacked
+                    return distance < 2.0 and not hacked and not failed
                 end,
                 onSelect = function()
                     hackpad()
@@ -43,12 +52,18 @@ local function spawnsecpadzone1()
             {
                 name = 'secpad_card1',
                 icon = 'fa-solid fa-id-card-clip',
-                label = 'Use Manager\'s card',
+                label = 'Use keycard',
+                items = 'card_flcamnger',
                 canInteract = function(_, distance)
                     return distance < 2.0 and not hacked
                 end,
                 onSelect = function()
-                    
+                    vaultmoving = true
+                    TriggerEvent('openvault')
+                    TriggerEvent('mifh:vault:trollys')
+                    Wait(20000)
+                    vaultmoving = false
+                    vaultopen = true
                 end
             },
 
@@ -62,6 +77,7 @@ local function spawnsecpadzone1()
                 onSelect = function()
                     vaultmoving = true
                     TriggerEvent('openvault')
+                    TriggerEvent('mifh:vault:trollys')
                     Wait(20000)
                     vaultmoving = false
                     vaultopen = true

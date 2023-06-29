@@ -1,10 +1,5 @@
 local debug = CG.debug
-
--- animation variables
-
-
 -- trolley variables
-local vaultaccess = false
 local trolly1, trolly2, trolly3
 local trollys1 = {
     spawned = false,
@@ -19,16 +14,8 @@ local trollys3 = {
     obj = nil
 }
 
-local function setanimdict(dict)
-    while (not HasAnimDictLoaded(dict) ) do
-        RequestAnimDict(dict)
-        Citizen.Wait(5)
-    end
-end 
-
 local function spawntrolly1()
     local loc = BK.banks.alta.money.loc
-    if vaultaccess then return end
     local model = lib.requestModel(joaat('hei_prop_hei_cash_trolly_01'))
     -- for testing, changed to alta [BK.banks.chosenbank.cameracontrol]
     local coords = loc[1]
@@ -61,7 +48,6 @@ end
 
 local function spawntrolly2()
     local loc = BK.banks.alta.money.loc
-    if vaultaccess then return end
     local model = lib.requestModel(joaat('hei_prop_hei_cash_trolly_01'))
     -- for testing, changed to alta [BK.banks.chosenbank.cameracontrol]
     local coords = loc[2]
@@ -94,7 +80,6 @@ end
 
 local function spawntrolly3()
     local loc = BK.banks.alta.money.loc
-    if vaultaccess then return end
     local model = lib.requestModel(joaat('hei_prop_hei_cash_trolly_01'))
     -- for testing, changed to alta [BK.banks.chosenbank.cameracontrol]
     local coords = loc[3]
@@ -125,50 +110,79 @@ local function spawntrolly3()
     exports.ox_target:addLocalEntity(trollys3.obj, pad_options)
 end
 
-AddEventHandler('mifh:anim:takemoney', function(object)
+AddEventHandler('mifh:anim:takemoney', function(trolly)
+    local player = GetPlayerPed(-1)
+    local grabcash = lib.requestAnimDict('anim@heists@ornate_bank@grab_cash', 100)
+    local bag = lib.requestModel('hei_p_m_bag_var22_arm_s', 100)
+    local mod_empty = lib.requestModel('hei_prop_hei_cash_trolly_03', 100)
+    local plyrcrd, plyrrot = GetEntityCoords(player), GetEntityRotation(player)
+    local cartcrd, cartrot = GetEntityCoords(trolly), GetEntityRotation(trolly)
     
+    -- netscene intro
+    while not HasAnimDictLoaded(grabcash) and not HasModelLoaded(bag) and not HasModelLoaded(mod_empty) do
+        Citizen.Wait(100)
+    end
+    while not NetworkHasControlOfEntity(trolly) do
+        Citizen.Wait(10)
+        NetworkRequestControlOfEntity(trolly)
+    end
+    -- start scene
+    local obj_bag = CreateObject(bag, plyrcrd.x, plyrcrd.y, plyrcrd.z, true, true, false)
+    local heist_start = NetworkCreateSynchronisedScene(
+        cartcrd.x, cartcrd.y, cartcrd.z,
+        cartrot.x, cartrot.y, cartrot.z, 
+        2, false, false, 1065353216, 0, 1.3)
+	NetworkAddPedToSynchronisedScene(player, heist_start, grabcash, 'intro', 1.5, -4.0, 1, 16, 1148846080, 0)
+    NetworkAddEntityToSynchronisedScene(obj_bag, heist_start, grabcash, 'bag_intro', 4.0, -8.0, 1)
+    SetPedComponentVariation(player, 5, 0, 0, 0)
+	NetworkStartSynchronisedScene(heist_start)
+    Citizen.Wait(1500)
+    -- mid scene
+    local heist_mid = NetworkCreateSynchronisedScene(
+        cartcrd.x, cartcrd.y, cartcrd.z, 
+        cartrot.x, cartrot.y, cartrot.z, 
+        2, false, false, 1065353216, 0, 1.3)
+    NetworkAddPedToSynchronisedScene(player, heist_mid, grabcash, 'grab', 1.5, -4.0, 1, 16, 1148846080, 0)
+    NetworkAddEntityToSynchronisedScene(obj_bag, heist_mid, grabcash, 'bag_grab', 4.0, -8.0, 1)
+    NetworkAddEntityToSynchronisedScene(trolly, heist_mid, grabcash, 'cart_cash_dissapear', 4.0, -8.0, 1)
+    NetworkStartSynchronisedScene(heist_mid)
+    Citizen.Wait(37000)
+    -- end scene
+    local heist_end = NetworkCreateSynchronisedScene(
+        cartcrd.x, cartcrd.y, cartcrd.z, 
+        cartrot.x, cartrot.y, cartrot.z, 
+        2, false, false, 1065353216, 0, 1.3)
+    NetworkAddPedToSynchronisedScene(player, heist_end, grabcash, 'exit', 1.5, -4.0, 1, 16, 1148846080, 0)
+    NetworkAddEntityToSynchronisedScene(obj_bag, heist_end, grabcash, 'bag_exit', 4.0, -8.0, 1)
+    NetworkStartSynchronisedScene(heist_end)
+    local newtrolly = CreateObject(mod_empty, cartcrd.x, cartcrd.y, cartcrd.z, true, false, false)
+    SetEntityRotation(newtrolly,  cartrot.x, cartrot.y, cartrot.z, 2, false)
+    while not NetworkHasControlOfEntity(trolly) do
+        Citizen.Wait(1)
+        NetworkRequestControlOfEntity(trolly)
+    end
+    DeleteObject(trolly)
+    while DoesEntityExist(trolly) do
+        Citizen.Wait(1)
+        DeleteObject(trolly)
+    end
+    PlaceObjectOnGroundProperly(newtrolly)
+    Citizen.Wait(1800)
+	if DoesEntityExist(obj_bag) then
+        DeleteEntity(obj_bag)
+    end
+    SetModelAsNoLongerNeeded(mod_empty)
 end)
 
---[[
-    "anim@heists@ornate_bank@grab_cash", "intro"
-    "anim@heists@ornate_bank@grab_cash", "bag_intro"
-    "anim@heists@ornate_bank@grab_cash", "grab"
-    "anim@heists@ornate_bank@grab_cash", "bag_grab"
-    "anim@heists@ornate_bank@grab_cash", "cart_cash_dissapear"
-    "anim@heists@ornate_bank@grab_cash", "exit"
-    "anim@heists@ornate_bank@grab_cash", "bag_exit"
-]]
-
-
+AddEventHandler('mifh:vault:trollys', function()
+    spawntrolly1()
+    spawntrolly2()
+    spawntrolly3()
+end)
 
 RegisterCommand('anim', function()
-    -- data
-    local player = GetPlayerPed(-1)
-    local plyrcrd, plyrrot = GetEntityCoords(player), GetEntityRotation(player)
-    -- anims
-    local bag = lib.requestModel('hei_p_m_bag_var22_arm_s', 100)
-    local trolly = lib.requestModel('hei_prop_hei_cash_trolly_01', 100)
-    local grabcash = lib.requestAnimDict('anim@heists@ornate_bank@grab_cash', 100)
-    -- models
-    local mod_bag = CreateObject(bag, plyrcrd.x, plyrcrd.y, plyrcrd.z, true, true, false)
-    local mod_trolly = CreateObject(trolly, plyrcrd.x, plyrcrd.y, plyrcrd.z, true, true, false)
-    -- netscene
-    local netscene = NetworkCreateSynchronisedScene(
-        plyrcrd.x, plyrcrd.y, plyrcrd.z-0.52, 
-        plyrrot.x, plyrrot.y, plyrrot.z, 
-        2, false, false, 1065353216, 0, 1.3)
-    -- add to netscene
-    FreezeEntityPosition(player, true)
-    NetworkAddPedToSynchronisedScene(player, netscene, grabcash, "grab", 1.5, -4.0, 1, 16, 1148846080, 0)
-    NetworkAddEntityToSynchronisedScene(mod_bag, netscene, grabcash, "bag_grab", 4.0, -8.0, 1)
-    NetworkAddEntityToSynchronisedScene(mod_trolly, netscene, grabcash, "cart_cash_dissapear", 4.0, -8.0, 1)
-    -- start scene
-    NetworkStartSynchronisedScene(netscene)
-    Citizen.Wait(37000) -- 47.93 secs
-    NetworkStopSynchronisedScene(netscene)
-    DeleteObject(mod_bag)
-    DeleteObject(mod_trolly)
-    FreezeEntityPosition(player, false)
-
+    spawntrolly1()
+    spawntrolly2()
+    spawntrolly3()
 end, false)
 

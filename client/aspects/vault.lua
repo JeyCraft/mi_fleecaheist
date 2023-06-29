@@ -2,6 +2,8 @@ local debug = CG.debug
 --local chosenbank = FH.chosenbank
 local vault = BK.banks.alta.vaultdoor
 local door = nil
+local drilled = false
+local vaultopen = false
 local drille = {
     spawned = false,
     obj = nil
@@ -26,15 +28,18 @@ local function spawnvaultzone()
                 icon = 'fa-solid fa-temperature-high',
                 label = 'Use thermal drill',
                 canInteract = function(_, distance)
-                    return distance < 2.0
+                    return distance < 2.0 and not vaultopen and not drilled
                 end,
                 onSelect = function()
                     TriggerEvent('spawnthermaldrill')
+                    drilled = true
                     Wait(5000)
                     DeleteEntity(drillt.obj)
                     drillt.obj = nil
                     drillt.spawned = false
+                    vaultopen = true
                     TriggerEvent('openvault')
+                    TriggerEvent('mifh:vault:trollys')
                 end
             },
             {
@@ -42,15 +47,18 @@ local function spawnvaultzone()
                 icon = 'fa-solid fa-bolt',
                 label = 'Use electric drill',
                 canInteract = function(_, distance)
-                    return distance < 2.0
+                    return distance < 2.0 and not vaultopen and not drilled
                 end,
                 onSelect = function()
                     TriggerEvent('spawnelectricdrill')
+                    drilled = true
                     Wait(5000)
                     DeleteEntity(drille.obj)
                     drille.obj = nil
                     drille.spawned = false
+                    vaultopen = true
                     TriggerEvent('openvault')
+                    TriggerEvent('mifh:vault:trollys')
                 end
             },
         }

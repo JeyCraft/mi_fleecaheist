@@ -1,6 +1,7 @@
 local debug = CG.debug
 --local chosenbank = FH.chosenbank
 local allow = CG.options.cameras
+local player = PlayerPedId()
 local system = true
 local cam1, cam2
 local camera = {
@@ -106,9 +107,22 @@ local function spawncamerapad()
                 return distance < 2.5 and system
             end,
             onSelect = function()
-                system = false
-                cam1:remove()
-                cam2:remove()
+                if lib.progressBar({
+                    duration = 15000,
+                    label = 'Tampering with camera system',
+                    useWhileDead = false,
+                    canCancel = true,
+                    disable = {
+                        car = true,
+                    },
+                    anim = {
+                        scenario = 'WORLD_HUMAN_WELDING'
+                    }
+                }) then 
+                    system = false
+                    cam1:remove()
+                    cam2:remove()
+                end
             end
         }
     }
