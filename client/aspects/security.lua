@@ -142,9 +142,3 @@ AddEventHandler('mifh:start:security', function(choice)
     spawnsecpadzone1(choice)
     spawnsecpadzone2(choice)
 end)
-
-RegisterCommand('bsec', function(choice)
-    choice = BK.debug
-    spawnsecpadzone1(choice)
-    spawnsecpadzone2(choice)
-end, false)

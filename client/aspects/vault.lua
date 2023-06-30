@@ -3,10 +3,6 @@ local debug = CG.debug
 local door = nil
 local drilled = false
 local vaultopen = false
-local drille = {
-    spawned = false,
-    obj = nil
-}
 local drillt = {
     spawned = false,
     obj = nil
@@ -41,44 +37,9 @@ local function spawnvaultzone(choice)
                     TriggerEvent('openvault', choice)
                 end
             },
-            {
-                name = 'vault_electric',
-                icon = 'fa-solid fa-bolt',
-                label = 'Use electric drill',
-                canInteract = function(_, distance)
-                    return distance < 2.0 and not vaultopen and not drilled
-                end,
-                onSelect = function()
-                    TriggerEvent('spawnelectricdrill', choice)
-                    drilled = true
-                    Wait(5000)
-                    DeleteEntity(drille.obj)
-                    drille.obj = nil
-                    drille.spawned = false
-                    vaultopen = true
-                    TriggerEvent('openvault', choice)
-                end
-            },
         }
     })
 end
-
-AddEventHandler('spawnelectricdrill', function(choice)
-    local elecdrill = lib.requestModel(joaat('k4mb1_prop_drill2'))
-    -- for testing, changed to alta [BK.banks.chosenbank.cameras]
-    local coords = choice.vaultdoor.drill
-    local head = choice.vaultdoor.drillhead
-    if drille.spawned then return end
-
-    local toole = CreateObject(
-        elecdrill, coords.x, coords.y, coords.z, 
-        true, true, true)
-    SetEntityHeading(toole, head)
-    FreezeEntityPosition(toole, true)
-
-    drille.obj = toole
-    drille.spawned = true
-end)
 
 AddEventHandler('spawnthermaldrill', function(choice)
     local thermdrill = lib.requestModel(joaat('k4mb1_prop_thermaldrill'))
@@ -131,8 +92,3 @@ AddEventHandler('mifh:start:vault', function(choice)
     choice = choice
     spawnvaultzone(choice)
 end)
-
-RegisterCommand('bvlt', function(choice)
-    choice = BK.debug
-    spawnvaultzone(choice)
-end, false)

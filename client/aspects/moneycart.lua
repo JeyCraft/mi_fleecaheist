@@ -181,9 +181,7 @@ AddEventHandler('mifh:start:trollys', function(choice)
     spawntrolly3(choice)
 end)
 
-RegisterCommand('btly', function(choice)
-    choice = BK.debug
-    spawntrolly1(choice)
-    spawntrolly2(choice)
-    spawntrolly3(choice)
-end, false)
+AddEventHandler('mifh:reset:all', function(choice)
+    choice = choice
+    UT.mfhremove_obj(trolly)
+end)

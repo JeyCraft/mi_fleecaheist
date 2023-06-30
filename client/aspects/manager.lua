@@ -54,7 +54,7 @@ AddEventHandler('mifh:start:mngr', function(choice)
     spawnmanager(choice)
 end)
 
-RegisterCommand('mngr', function(choice)
-    choice = BK.debug
-    spawnmanager(choice)
-end, false)
+AddEventHandler('mifh:reset:mngr', function(choice)
+    choice = choice
+    UT.mfhremove_ped(mngrped.ped)
+end)

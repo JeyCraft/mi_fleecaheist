@@ -6,6 +6,9 @@ CG.options = {
     manager = true
 }
 
+-- time before heist can be planned again
+CG.heistcooldown = 1
+
 CG.start = {
     loc = vec4(1276.001, -1710.265, 54.771, 297.869),
     size = vec3(0.5, 1, 1),

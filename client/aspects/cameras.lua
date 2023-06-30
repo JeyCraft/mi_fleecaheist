@@ -11,6 +11,14 @@ local camerapad = {
     obj = nil
 }
 
+local timer = false
+local function cooldown()
+    timer = true
+    SetTimeout(CG.heistcooldown * 60000, function()
+        timer = false
+        FH.inprogress = false
+    end)
+end
 
 local function notifylaw()
     -- add export here for police job to show alert
@@ -127,7 +135,6 @@ local function spawncamerapad(choice)
     exports.ox_target:addLocalEntity(camerapad.obj, pad_options)
 end
 
-
 AddEventHandler('mifh:start:cameras', function(choice)
     choice = choice
     spawncameras(choice)
@@ -144,19 +151,9 @@ AddEventHandler('mifh:start:cameras', function(choice)
     end)
 end)
 
-RegisterCommand('bcam', function(choice)
-    choice = BK.debug
-    spawncameras(choice)
-    spawncamerapad(choice)
-
-    Citizen.CreateThread(function()
-        if not system then
-            return nil
-        else
-            spawncamerazoneoutside(choice)
-            spawncamerazoneinside(choice)
-        end
-        Citizen.Wait(100)
-    end)
-end, false)
-
+AddEventHandler('mifh:reset:cameras', function()
+    UT.mfhremove_obj(camera.obj)
+    system = false
+    cam1:remove()
+    cam2:remove()
+end)
