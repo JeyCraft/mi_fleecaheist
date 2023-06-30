@@ -6,6 +6,13 @@ CG.options = {
     manager = true
 }
 
+CG.start = {
+    loc = vec4(1276.001, -1710.265, 54.771, 297.869),
+    size = vec3(0.5, 1, 1),
+    head = 25,
+    debug = debug
+}
+
 -- notification showing you were caught on camera
 -- use [https://fontawesome.com/search?m=free&o=r] for icons
 -- use [https://htmlcolorcodes.com] for colors

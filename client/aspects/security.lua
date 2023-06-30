@@ -5,8 +5,6 @@ local failed = false
 local vaultopen = false
 local vaultmoving = false
 
-local function cooldown()
-end
 
 local function hackpad()
     if hacked == true then return end
@@ -28,10 +26,10 @@ local function hackpad()
     end
 end
 
-local function spawnsecpadzone1()
-    local coords = BK.banks.alta.secsystemoutside.loc
-    local head = BK.banks.alta.secsystemoutside.head
-    local size = BK.banks.alta.secsystemoutside.size
+local function spawnsecpadzone1(choice)
+    local coords = choice.secsystemoutside.loc
+    local head = choice.secsystemoutside.head
+    local size = choice.secsystemoutside.size
     exports.ox_target:addBoxZone({
         coords = coords,
         size = size,
@@ -102,10 +100,10 @@ local function spawnsecpadzone1()
     })
 end
 
-local function spawnsecpadzone2()
-    local coords = BK.banks.alta.secsysteminside.loc
-    local head = BK.banks.alta.secsysteminside.head
-    local size = BK.banks.alta.secsysteminside.size
+local function spawnsecpadzone2(choice)
+    local coords = choice.secsysteminside.loc
+    local head = choice.secsysteminside.head
+    local size = choice.secsysteminside.size
     exports.ox_target:addBoxZone({
         coords = coords,
         size = size,
@@ -121,7 +119,7 @@ local function spawnsecpadzone2()
                 end,
                 onSelect = function()
                     vaultmoving = true
-                    TriggerEvent('openvault')
+                    TriggerEvent('openvault', choice)
                     Wait(20000)
                     vaultmoving = false
                     vaultopen = true
@@ -136,7 +134,7 @@ local function spawnsecpadzone2()
                 end,
                 onSelect = function()
                     vaultmoving = true
-                    TriggerEvent('closevault')
+                    TriggerEvent('closevault', choice)
                     Wait(20000)
                     vaultmoving = false
                     vaultopen = false
@@ -145,6 +143,11 @@ local function spawnsecpadzone2()
         }
     })
 end
+
+AddEventHandler('mifh:start:security', function(choice)
+    spawnsecpadzone1(choice)
+    spawnsecpadzone2(choice)
+end)
 
 RegisterCommand('bsec', function()
     spawnsecpadzone1()

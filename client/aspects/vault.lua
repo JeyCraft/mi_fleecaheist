@@ -1,6 +1,5 @@
 local debug = CG.debug
 --local chosenbank = FH.chosenbank
-local vault = BK.banks.alta.vaultdoor
 local door = nil
 local drilled = false
 local vaultopen = false
@@ -13,10 +12,10 @@ local drillt = {
     obj = nil
 }
 
-local function spawnvaultzone()
-    local coords = BK.banks.alta.vaultdoor.loc
-    local head = BK.banks.alta.vaultdoor.head
-    local size = BK.banks.alta.vaultdoor.size
+local function spawnvaultzone(choice)
+    local coords = choice.vaultdoor.loc
+    local head = choice.vaultdoor.head
+    local size = choice.vaultdoor.size
     exports.ox_target:addBoxZone({
         coords = coords,
         size = size,
@@ -31,15 +30,14 @@ local function spawnvaultzone()
                     return distance < 2.0 and not vaultopen and not drilled
                 end,
                 onSelect = function()
-                    TriggerEvent('spawnthermaldrill')
+                    TriggerEvent('spawnthermaldrill', choice)
                     drilled = true
                     Wait(5000)
                     DeleteEntity(drillt.obj)
                     drillt.obj = nil
                     drillt.spawned = false
                     vaultopen = true
-                    TriggerEvent('openvault')
-                    TriggerEvent('mifh:vault:trollys')
+                    TriggerEvent('openvault', choice)
                 end
             },
             {
@@ -50,26 +48,25 @@ local function spawnvaultzone()
                     return distance < 2.0 and not vaultopen and not drilled
                 end,
                 onSelect = function()
-                    TriggerEvent('spawnelectricdrill')
+                    TriggerEvent('spawnelectricdrill', choice)
                     drilled = true
                     Wait(5000)
                     DeleteEntity(drille.obj)
                     drille.obj = nil
                     drille.spawned = false
                     vaultopen = true
-                    TriggerEvent('openvault')
-                    TriggerEvent('mifh:vault:trollys')
+                    TriggerEvent('openvault', choice)
                 end
             },
         }
     })
 end
 
-AddEventHandler('spawnelectricdrill', function()
+AddEventHandler('spawnelectricdrill', function(choice)
     local elecdrill = lib.requestModel(joaat('k4mb1_prop_drill2'))
     -- for testing, changed to alta [BK.banks.chosenbank.cameras]
-    local coords = BK.banks.alta.vaultdoor.drill
-    local head = BK.banks.alta.vaultdoor.drillhead
+    local coords = choice.vaultdoor.drill
+    local head = choice.vaultdoor.drillhead
     if drille.spawned then return end
 
     local toole = CreateObject(
@@ -82,11 +79,11 @@ AddEventHandler('spawnelectricdrill', function()
     drille.spawned = true
 end)
 
-AddEventHandler('spawnthermaldrill', function()
+AddEventHandler('spawnthermaldrill', function(choice)
     local thermdrill = lib.requestModel(joaat('k4mb1_prop_thermaldrill'))
     -- for testing, changed to alta [BK.banks.chosenbank.cameras]
-    local coords = BK.banks.alta.vaultdoor.drill
-    local head = BK.banks.alta.vaultdoor.drillhead
+    local coords = choice.vaultdoor.drill
+    local head = choice.vaultdoor.drillhead
     if drillt.spawned then return end
 
     local toolt = CreateObject(
@@ -99,7 +96,8 @@ AddEventHandler('spawnthermaldrill', function()
     drillt.spawned = true
 end)
 
-AddEventHandler('openvault', function()
+AddEventHandler('openvault', function(choice)
+    local vault = choice.vaultdoor
     door = vault.loc
     local obj = GetClosestObjectOfType(door.x, door.y, door.z, 10, vault.hash, false, false, false)
     local count = 0
@@ -113,7 +111,8 @@ AddEventHandler('openvault', function()
     FreezeEntityPosition(obj, true)
 end)
 
-AddEventHandler('closevault', function()
+AddEventHandler('closevault', function(choice)
+    local vault = choice.vaultdoor
     door = vault.loc
     local obj = GetClosestObjectOfType(door.x, door.y, door.z, 10, vault.hash, false, false, false)
     local count = 0
@@ -125,6 +124,11 @@ AddEventHandler('closevault', function()
         Wait(1)
     until count == 2000
     FreezeEntityPosition(obj, true)
+end)
+
+AddEventHandler('mifh:start:vault', function(choice)
+    choice = choice
+    spawnvaultzone(choice)
 end)
 
 RegisterCommand('bvlt', function()

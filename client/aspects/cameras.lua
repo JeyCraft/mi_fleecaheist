@@ -1,7 +1,5 @@
 local debug = CG.debug
---local chosenbank = FH.chosenbank
 local allow = CG.options.cameras
-local player = PlayerPedId()
 local system = true
 local cam1, cam2
 local camera = {
@@ -33,11 +31,11 @@ local function notifylaw()
     })
 end
 
-local function spawncameras()
+local function spawncameras(choice)
     if not allow then return end
     local cammodel = lib.requestModel(joaat('v_serv_securitycam_03'))
     -- for testing, changed to alta [BK.banks.chosenbank.cameras]
-    local coords = BK.banks.alta.camera
+    local coords = choice.camera
     if camera.spawned then return end
 
     local camcam = CreateObject(
@@ -50,11 +48,11 @@ local function spawncameras()
     camera.spawned = true
 end
 
-local function spawncamerazoneoutside()
+local function spawncamerazoneoutside(choice)
     if not allow then return end
-    local coords = BK.banks.alta.camzoneoutside.loc
-    local head = BK.banks.alta.camzoneoutside.head
-    local size = BK.banks.alta.camzoneoutside.size
+    local coords = choice.camzoneoutside.loc
+    local head = choice.camzoneoutside.head
+    local size = choice.camzoneoutside.size
     cam1 = lib.zones.box({
         coords = coords,
         size = size,
@@ -66,11 +64,11 @@ local function spawncamerazoneoutside()
     })
 end
 
-local function spawncamerazoneinside()
+local function spawncamerazoneinside(choice)
     if not allow then return end
-    local coords = BK.banks.alta.camzoneinside.loc
-    local head = BK.banks.alta.camzoneinside.head
-    local size = BK.banks.alta.camzoneinside.size
+    local coords = choice.camzoneinside.loc
+    local head = choice.camzoneinside.head
+    local size = choice.camzoneinside.size
     cam2 = lib.zones.box({
         coords = coords,
         size = size,
@@ -82,11 +80,11 @@ local function spawncamerazoneinside()
     })
 end
 
-local function spawncamerapad()
+local function spawncamerapad(choice)
     if not allow then return end
     local elecpad = lib.requestModel(joaat('ch_prop_ch_fuse_box_01a'))
     -- for testing, changed to alta [BK.banks.chosenbank.cameracontrol]
-    local coords = BK.banks.alta.cameracontrol
+    local coords = choice.cameracontrol
     if camerapad.spawned then return end
 
     local campad = CreateObject(
@@ -129,6 +127,22 @@ local function spawncamerapad()
     exports.ox_target:addLocalEntity(camerapad.obj, pad_options)
 end
 
+
+AddEventHandler('mifh:start:cameras', function(choice)
+    choice = choice
+    spawncameras(choice)
+    spawncamerapad(choice)
+
+    Citizen.CreateThread(function()
+        if not system then
+            return nil
+        else
+            spawncamerazoneoutside(choice)
+            spawncamerazoneinside(choice)
+        end
+        Citizen.Wait(100)
+    end)
+end)
 
 RegisterCommand('bcam', function()
     spawncameras()

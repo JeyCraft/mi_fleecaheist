@@ -14,8 +14,8 @@ local trollys3 = {
     obj = nil
 }
 
-local function spawntrolly1()
-    local loc = BK.banks.alta.money.loc
+local function spawntrolly1(choice)
+    local loc = choice.money.loc
     local model = lib.requestModel(joaat('hei_prop_hei_cash_trolly_01'))
     -- for testing, changed to alta [BK.banks.chosenbank.cameracontrol]
     local coords = loc[1]
@@ -46,8 +46,8 @@ local function spawntrolly1()
     exports.ox_target:addLocalEntity(trollys1.obj, pad_options)
 end
 
-local function spawntrolly2()
-    local loc = BK.banks.alta.money.loc
+local function spawntrolly2(choice)
+    local loc = choice.money.loc
     local model = lib.requestModel(joaat('hei_prop_hei_cash_trolly_01'))
     -- for testing, changed to alta [BK.banks.chosenbank.cameracontrol]
     local coords = loc[2]
@@ -78,8 +78,8 @@ local function spawntrolly2()
     exports.ox_target:addLocalEntity(trollys2.obj, pad_options)
 end
 
-local function spawntrolly3()
-    local loc = BK.banks.alta.money.loc
+local function spawntrolly3(choice)
+    local loc = choice.money.loc
     local model = lib.requestModel(joaat('hei_prop_hei_cash_trolly_01'))
     -- for testing, changed to alta [BK.banks.chosenbank.cameracontrol]
     local coords = loc[3]
@@ -174,15 +174,9 @@ AddEventHandler('mifh:anim:takemoney', function(trolly)
     SetModelAsNoLongerNeeded(mod_empty)
 end)
 
-AddEventHandler('mifh:vault:trollys', function()
-    spawntrolly1()
-    spawntrolly2()
-    spawntrolly3()
+AddEventHandler('mifh:start:trollys', function(choice)
+    choice = choice
+    spawntrolly1(choice)
+    spawntrolly2(choice)
+    spawntrolly3(choice)
 end)
-
-RegisterCommand('anim', function()
-    spawntrolly1()
-    spawntrolly2()
-    spawntrolly3()
-end, false)
-
