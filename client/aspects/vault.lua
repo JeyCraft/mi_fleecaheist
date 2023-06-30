@@ -12,6 +12,7 @@ local drillt = {
     obj = nil
 }
 
+
 local function spawnvaultzone(choice)
     local coords = choice.vaultdoor.loc
     local head = choice.vaultdoor.head
@@ -131,16 +132,7 @@ AddEventHandler('mifh:start:vault', function(choice)
     spawnvaultzone(choice)
 end)
 
-RegisterCommand('bvlt', function()
-    spawnvaultzone()
-end, false)
-
-RegisterCommand('bdoor1', function()
-    TriggerEvent('openvault')
-    Wait(1)
-end, false)
-
-RegisterCommand('bdoor2', function()
-    TriggerEvent('closevault')
-    Wait(1)
+RegisterCommand('bvlt', function(choice)
+    choice = BK.debug
+    spawnvaultzone(choice)
 end, false)

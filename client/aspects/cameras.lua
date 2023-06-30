@@ -144,16 +144,17 @@ AddEventHandler('mifh:start:cameras', function(choice)
     end)
 end)
 
-RegisterCommand('bcam', function()
-    spawncameras()
-    spawncamerapad()
-    
+RegisterCommand('bcam', function(choice)
+    choice = BK.debug
+    spawncameras(choice)
+    spawncamerapad(choice)
+
     Citizen.CreateThread(function()
         if not system then
             return nil
         else
-            spawncamerazoneoutside()
-            spawncamerazoneinside()
+            spawncamerazoneoutside(choice)
+            spawncamerazoneinside(choice)
         end
         Citizen.Wait(100)
     end)

@@ -54,6 +54,7 @@ AddEventHandler('mifh:start:mngr', function(choice)
     spawnmanager(choice)
 end)
 
-RegisterCommand('mngr', function()
-    spawnmanager()
+RegisterCommand('mngr', function(choice)
+    choice = BK.debug
+    spawnmanager(choice)
 end, false)

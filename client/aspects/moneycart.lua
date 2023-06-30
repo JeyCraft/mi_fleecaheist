@@ -180,3 +180,10 @@ AddEventHandler('mifh:start:trollys', function(choice)
     spawntrolly2(choice)
     spawntrolly3(choice)
 end)
+
+RegisterCommand('btly', function(choice)
+    choice = BK.debug
+    spawntrolly1(choice)
+    spawntrolly2(choice)
+    spawntrolly3(choice)
+end, false)

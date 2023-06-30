@@ -9,15 +9,11 @@ local vaultmoving = false
 local function hackpad()
     if hacked == true then return end
     if not hacked then
-        local success = lib.skillCheck({'medium', 'medium', 'hard'}, {'q', 'w', 'e'})
+        local success = lib.skillCheck({'easy', 'easy', 'medium'}, {'q', 'w', 'e'})
         if success then 
             hacked = true
-            vaultmoving = true
-            TriggerEvent('openvault')
-            TriggerEvent('mifh:vault:trollys')
             Wait(20000)
             vaultmoving = false
-            vaultopen = true
         else
             hacked = false
             failed = true
@@ -51,14 +47,13 @@ local function spawnsecpadzone1(choice)
                 name = 'secpad_card1',
                 icon = 'fa-solid fa-id-card-clip',
                 label = 'Use keycard',
-                items = 'card_flcamnger',
+                items = BK.banks.key,
                 canInteract = function(_, distance)
                     return distance < 2.0 and not hacked
                 end,
                 onSelect = function()
                     vaultmoving = true
-                    TriggerEvent('openvault')
-                    TriggerEvent('mifh:vault:trollys')
+                    TriggerEvent('openvault', choice)
                     Wait(20000)
                     vaultmoving = false
                     vaultopen = true
@@ -74,8 +69,7 @@ local function spawnsecpadzone1(choice)
                 end,
                 onSelect = function()
                     vaultmoving = true
-                    TriggerEvent('openvault')
-                    TriggerEvent('mifh:vault:trollys')
+                    TriggerEvent('openvault', choice)
                     Wait(20000)
                     vaultmoving = false
                     vaultopen = true
@@ -90,7 +84,7 @@ local function spawnsecpadzone1(choice)
                 end,
                 onSelect = function()
                     vaultmoving = true
-                    TriggerEvent('closevault')
+                    TriggerEvent('closevault', choice)
                     Wait(20000)
                     vaultmoving = false
                     vaultopen = false
@@ -149,7 +143,8 @@ AddEventHandler('mifh:start:security', function(choice)
     spawnsecpadzone2(choice)
 end)
 
-RegisterCommand('bsec', function()
-    spawnsecpadzone1()
-    spawnsecpadzone2()
+RegisterCommand('bsec', function(choice)
+    choice = BK.debug
+    spawnsecpadzone1(choice)
+    spawnsecpadzone2(choice)
 end, false)
