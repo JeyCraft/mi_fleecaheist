@@ -47,7 +47,6 @@ lib.registerContext({
             onSelect = function()
                 FH.inprogress = true
                 FH.chosenbank = BK.banks.alta
-                TriggerEvent('mifh:start:cameras', FH.chosenbank)
                 TriggerEvent('mifh:start:mngr', FH.chosenbank)
                 TriggerEvent('mifh:start:security', FH.chosenbank)
                 TriggerEvent('mifh:start:vault', FH.chosenbank)
@@ -63,7 +62,6 @@ lib.registerContext({
             onSelect = function()
                 FH.inprogress = true
                 FH.chosenbank = BK.banks.legion
-                TriggerEvent('mifh:start:cameras', FH.chosenbank)
                 TriggerEvent('mifh:start:mngr', FH.chosenbank)
                 TriggerEvent('mifh:start:security', FH.chosenbank)
                 TriggerEvent('mifh:start:vault', FH.chosenbank)
@@ -78,7 +76,6 @@ lib.registerContext({
             onSelect = function()
                 FH.inprogress = true
                 FH.chosenbank = BK.banks.burton
-                TriggerEvent('mifh:start:cameras', FH.chosenbank)
                 TriggerEvent('mifh:start:mngr', FH.chosenbank)
                 TriggerEvent('mifh:start:security', FH.chosenbank)
                 TriggerEvent('mifh:start:vault', FH.chosenbank)
@@ -93,7 +90,6 @@ lib.registerContext({
             onSelect = function()
                 FH.inprogress = true
                 FH.chosenbank = BK.banks.delperro
-                TriggerEvent('mifh:start:cameras', FH.chosenbank)
                 TriggerEvent('mifh:start:mngr', FH.chosenbank)
                 TriggerEvent('mifh:start:security', FH.chosenbank)
                 TriggerEvent('mifh:start:vault', FH.chosenbank)
@@ -108,7 +104,6 @@ lib.registerContext({
             onSelect = function()
                 FH.inprogress = true
                 FH.chosenbank = BK.banks.chumash
-                TriggerEvent('mifh:start:cameras', FH.chosenbank)
                 TriggerEvent('mifh:start:mngr', FH.chosenbank)
                 TriggerEvent('mifh:start:security', FH.chosenbank)
                 TriggerEvent('mifh:start:vault', FH.chosenbank)
@@ -123,7 +118,6 @@ lib.registerContext({
             onSelect = function()
                 FH.inprogress = true
                 FH.chosenbank = BK.banks.harmony
-                TriggerEvent('mifh:start:cameras', FH.chosenbank)
                 TriggerEvent('mifh:start:mngr', FH.chosenbank)
                 TriggerEvent('mifh:start:security', FH.chosenbank)
                 TriggerEvent('mifh:start:vault', FH.chosenbank)
@@ -135,7 +129,6 @@ lib.registerContext({
 })
 
 AddEventHandler('mifh:reset:all', function(choice)
-    TriggerEvent('mifh:reset:cameras', choice)
     TriggerEvent('mifh:reset:mngr', choice)
     TriggerEvent('mifh:reset:security', choice)
     TriggerEvent('mifh:reset:vault', choice)
@@ -143,11 +136,28 @@ AddEventHandler('mifh:reset:all', function(choice)
 end)
 
 RegisterCommand('breset', function(choice)
-    TriggerEvent('mifh:reset:cameras', choice)
     TriggerEvent('mifh:reset:mngr', choice)
     TriggerEvent('mifh:reset:security', choice)
     TriggerEvent('mifh:reset:vault', choice)
     TriggerEvent('mifh:reset:trollys', choice)
+end, false)
+
+RegisterCommand('bstart1', function()
+    FH.inprogress = true
+    FH.chosenbank = BK.banks.alta
+    TriggerEvent('mifh:start:mngr', FH.chosenbank)
+    TriggerEvent('mifh:start:security', FH.chosenbank)
+    TriggerEvent('mifh:start:vault', FH.chosenbank)
+    TriggerEvent('mifh:start:trollys', FH.chosenbank)
+end, false)
+
+RegisterCommand('bstart2', function()
+    FH.inprogress = true
+    FH.chosenbank = BK.banks.legion
+    TriggerEvent('mifh:start:mngr', FH.chosenbank)
+    TriggerEvent('mifh:start:security', FH.chosenbank)
+    TriggerEvent('mifh:start:vault', FH.chosenbank)
+    TriggerEvent('mifh:start:trollys', FH.chosenbank)
 end, false)
 
 Citizen.CreateThread(function()

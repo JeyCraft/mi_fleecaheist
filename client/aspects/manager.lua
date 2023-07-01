@@ -56,5 +56,6 @@ end)
 
 AddEventHandler('mifh:reset:mngr', function(choice)
     choice = choice
-    UT.mfhremove_ped(mngrped.ped)
+    UT.mfhremove_ped(manager)
+    mngrped.spawned = false
 end)
