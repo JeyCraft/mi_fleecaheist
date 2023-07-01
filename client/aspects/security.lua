@@ -4,6 +4,7 @@ local hacked = false
 local failed = false
 local vaultopen = false
 local vaultmoving = false
+local inside, outside
 
 
 local function hackpad()
@@ -26,7 +27,7 @@ local function spawnsecpadzone1(choice)
     local coords = choice.secsystemoutside.loc
     local head = choice.secsystemoutside.head
     local size = choice.secsystemoutside.size
-    exports.ox_target:addBoxZone({
+    inside = exports.ox_target:addBoxZone({
         coords = coords,
         size = size,
         rotation = head,
@@ -98,7 +99,7 @@ local function spawnsecpadzone2(choice)
     local coords = choice.secsysteminside.loc
     local head = choice.secsysteminside.head
     local size = choice.secsysteminside.size
-    exports.ox_target:addBoxZone({
+    outside = exports.ox_target:addBoxZone({
         coords = coords,
         size = size,
         rotation = head,
@@ -141,4 +142,10 @@ end
 AddEventHandler('mifh:start:security', function(choice)
     spawnsecpadzone1(choice)
     spawnsecpadzone2(choice)
+end)
+
+AddEventHandler('mifh:reset:security', function(choice)
+    choice = choice
+    exports.ox_target:removeZone(inside)
+    exports.ox_target:removeZone(outside)
 end)

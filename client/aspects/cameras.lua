@@ -88,6 +88,11 @@ local function spawncamerazoneinside(choice)
     })
 end
 
+local function resetcam(choice)
+    cam1:remove(choice)
+    cam2:remove(choice)
+end
+
 local function spawncamerapad(choice)
     if not allow then return end
     local elecpad = lib.requestModel(joaat('ch_prop_ch_fuse_box_01a'))
@@ -126,8 +131,7 @@ local function spawncamerapad(choice)
                     }
                 }) then 
                     system = false
-                    cam1:remove()
-                    cam2:remove()
+                    resetcam()
                 end
             end
         }
@@ -142,7 +146,8 @@ AddEventHandler('mifh:start:cameras', function(choice)
 
     Citizen.CreateThread(function()
         if not system then
-            return nil
+            cam1:remove(choice)
+            cam2:remove(choice)
         else
             spawncamerazoneoutside(choice)
             spawncamerazoneinside(choice)
@@ -154,6 +159,5 @@ end)
 AddEventHandler('mifh:reset:cameras', function()
     UT.mfhremove_obj(camera.obj)
     system = false
-    cam1:remove()
-    cam2:remove()
+    resetcam()
 end)

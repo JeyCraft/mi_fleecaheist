@@ -142,6 +142,14 @@ AddEventHandler('mifh:reset:all', function(choice)
     TriggerEvent('mifh:reset:trollys', choice)
 end)
 
+RegisterCommand('breset', function(choice)
+    TriggerEvent('mifh:reset:cameras', choice)
+    TriggerEvent('mifh:reset:mngr', choice)
+    TriggerEvent('mifh:reset:security', choice)
+    TriggerEvent('mifh:reset:vault', choice)
+    TriggerEvent('mifh:reset:trollys', choice)
+end, false)
+
 Citizen.CreateThread(function()
     if resourceName == GetCurrentResourceName() then
         if not FH.inprogress then

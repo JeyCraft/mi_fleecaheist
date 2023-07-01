@@ -181,7 +181,8 @@ AddEventHandler('mifh:start:trollys', function(choice)
     spawntrolly3(choice)
 end)
 
-AddEventHandler('mifh:reset:all', function(choice)
-    choice = choice
-    UT.mfhremove_obj(trolly)
+AddEventHandler('mifh:reset:trollys', function(choice)
+    UT.mfhremove_obj(trolly1)
+    UT.mfhremove_obj(trolly2)
+    UT.mfhremove_obj(trolly3)
 end)

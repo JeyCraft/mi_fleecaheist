@@ -7,13 +7,14 @@ local drillt = {
     spawned = false,
     obj = nil
 }
+local vaultset
 
 
 local function spawnvaultzone(choice)
     local coords = choice.vaultdoor.loc
     local head = choice.vaultdoor.head
     local size = choice.vaultdoor.size
-    exports.ox_target:addBoxZone({
+    vaultset = exports.ox_target:addBoxZone({
         coords = coords,
         size = size,
         rotation = head,
@@ -91,4 +92,9 @@ end)
 AddEventHandler('mifh:start:vault', function(choice)
     choice = choice
     spawnvaultzone(choice)
+end)
+
+AddEventHandler('mifh:reset:vault', function(choice)
+    choice = choice
+    exports.ox_target:removeZone(vaultset)
 end)
