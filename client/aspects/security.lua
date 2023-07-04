@@ -8,17 +8,33 @@ local inside, outside
 
 
 local function hackpad()
-    if hacked == true then return end
+    local hackingdict = lib.requestAnimDict('anim@heists@humane_labs@emp@hack_door', 100)
+    local hackingset = lib.requestAnimSet('hack_loop', 100)
     if not hacked then
-        local success = lib.skillCheck({'easy', 'easy', 'medium'}, {'q', 'w', 'e'})
-        if success then 
-            hacked = true
+        if lib.progressBar({
+            duration = 10000,
+            label = 'Hacking terminal',
+            useWhileDead = false,
+            canCancel = true,
+            disable = {
+                car = true,
+            },
+            anim = {
+                dict = hackingdict,
+                clip = hackingset,
+            },
+            prop = {
+                bone = 28422,
+                model = `prop_police_phone`,
+                pos = vec3(0.0, 0.0, 0.0301),
+                rot = vec3(0.0, 0.0, 0.0)
+            },
+        }) then hacked = true
             Wait(20000)
             vaultmoving = false
-        else
+        else 
             hacked = false
-            failed = true
-            
+            failed = false 
         end
     end
 end
