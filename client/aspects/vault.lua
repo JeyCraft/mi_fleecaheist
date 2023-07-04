@@ -29,6 +29,7 @@ local function spawnvaultzone(choice)
                 end,
                 onSelect = function()
                     TriggerEvent('spawnthermaldrill', choice)
+                    TriggerEvent('spawnthermaleffects', choice)
                     drilled = true
                     Wait(5000)
                     DeleteEntity(drillt.obj)
@@ -41,6 +42,26 @@ local function spawnvaultzone(choice)
         }
     })
 end
+
+AddEventHandler('spawnthermaleffects', function(choice)
+    local fxdict = 'des_bigjobdrill'
+    local fxname = 'ent_ray_big_drill_loop'
+    Citizen.CreateThread(function()
+        lib.requestNamedPtfxAsset(fxdict, 250)
+        while not HasNamedPtfxAssetLoaded(fxdict) do
+            Citizen.Wait(10)
+        end
+        local coords = (choice.vaultdoor.head)
+        local v = 0
+        while v < 25 do
+            UseParticleFxAsset(fxdict)
+            StartParticleFxLoopedAtCoord(fxname, coords.x, coords.y, coords.z, 0.0, 0.0, 0.0, 0.0, false, false, false, false)
+            v = v+1
+            Citizen.Wait(500)
+        end
+    end)
+
+end)
 
 AddEventHandler('spawnthermaldrill', function(choice)
     local thermdrill = lib.requestModel(joaat('k4mb1_prop_thermaldrill'))
@@ -90,7 +111,6 @@ AddEventHandler('closevault', function(choice)
 end)
 
 AddEventHandler('mifh:start:vault', function(choice)
-    choice = choice
     spawnvaultzone(choice)
 end)
 

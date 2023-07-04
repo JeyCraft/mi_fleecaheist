@@ -25,7 +25,7 @@ local function hackpad()
             },
             prop = {
                 bone = 28422,
-                model = `prop_police_phone`,
+                model = 'prop_police_phone',
                 pos = vec3(0.0, 0.0, 0.0301),
                 rot = vec3(0.0, 0.0, 0.0)
             },
