@@ -5,9 +5,10 @@ FH.chosenbank = nil
 FH.inprogress = false
 
 local timer = false
+local cool = CG.heistcooldown
 local function cooldown()
     timer = true
-    SetTimeout(CG.heistcooldown * 60000, function()
+    SetTimeout(cool * 60000, function()
         timer = false
         FH.inprogress = false
     end)
@@ -36,6 +37,11 @@ local function heiststartloc()
     })
 end
 
+local function loadblip(choice)
+    local blip = AddBlipForCoord(choice.x, choice.y, choice.z)
+    UT.mfhroute(blip)
+end
+
 lib.registerContext({
     id = 'fleecaheist_menu',
     title = 'Darkweb: Fleeca Heist Plan',
@@ -45,14 +51,17 @@ lib.registerContext({
             description = 'Los Santos, Alta St & Harwick Ave',
             icon = 'piggy-bank',
             onSelect = function()
+                if not timer then
                 FH.inprogress = true
                 FH.chosenbank = BK.banks.alta
+                loadblip(FH.chosenbank.vaultdoor.loc)
                 TriggerEvent('mifh:start:mngr', FH.chosenbank)
                 TriggerEvent('mifh:start:security', FH.chosenbank)
                 TriggerEvent('mifh:start:vault', FH.chosenbank)
                 TriggerEvent('mifh:start:trollys', FH.chosenbank)
                 cooldown()
-                TriggerEvent('mifh:reset:all', FH.chosenbank)
+                --TriggerEvent('mifh:reset:all', FH.chosenbank)
+                end
             end,
         },
         {
@@ -62,6 +71,7 @@ lib.registerContext({
             onSelect = function()
                 FH.inprogress = true
                 FH.chosenbank = BK.banks.legion
+                loadblip(FH.chosenbank.vaultdoor.loc)
                 TriggerEvent('mifh:start:mngr', FH.chosenbank)
                 TriggerEvent('mifh:start:security', FH.chosenbank)
                 TriggerEvent('mifh:start:vault', FH.chosenbank)
@@ -76,6 +86,7 @@ lib.registerContext({
             onSelect = function()
                 FH.inprogress = true
                 FH.chosenbank = BK.banks.burton
+                loadblip(FH.chosenbank.vaultdoor.loc)
                 TriggerEvent('mifh:start:mngr', FH.chosenbank)
                 TriggerEvent('mifh:start:security', FH.chosenbank)
                 TriggerEvent('mifh:start:vault', FH.chosenbank)
@@ -90,6 +101,7 @@ lib.registerContext({
             onSelect = function()
                 FH.inprogress = true
                 FH.chosenbank = BK.banks.delperro
+                loadblip(FH.chosenbank.vaultdoor.loc)
                 TriggerEvent('mifh:start:mngr', FH.chosenbank)
                 TriggerEvent('mifh:start:security', FH.chosenbank)
                 TriggerEvent('mifh:start:vault', FH.chosenbank)
@@ -104,6 +116,7 @@ lib.registerContext({
             onSelect = function()
                 FH.inprogress = true
                 FH.chosenbank = BK.banks.chumash
+                loadblip(FH.chosenbank.vaultdoor.loc)
                 TriggerEvent('mifh:start:mngr', FH.chosenbank)
                 TriggerEvent('mifh:start:security', FH.chosenbank)
                 TriggerEvent('mifh:start:vault', FH.chosenbank)
@@ -118,6 +131,7 @@ lib.registerContext({
             onSelect = function()
                 FH.inprogress = true
                 FH.chosenbank = BK.banks.harmony
+                loadblip(FH.chosenbank.vaultdoor.loc)
                 TriggerEvent('mifh:start:mngr', FH.chosenbank)
                 TriggerEvent('mifh:start:security', FH.chosenbank)
                 TriggerEvent('mifh:start:vault', FH.chosenbank)

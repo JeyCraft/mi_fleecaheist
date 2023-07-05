@@ -11,20 +11,12 @@ option to open / close vault door with inside / outside pad
 ]]
 
 BK.banks  = {
-    key = 'phone',
+    key = 'scard_fleeca',
+    hack = 'hack_tablet',
+    drill = 'drill_thermal',
+    money = 'bag_blackmoney',
+
     alta = {
-        camera = vec4(271.758, -309.673, 57.025, 70.00),
-        cameracontrol = vec4(276.055, -308.707, 49.864, 340.00),
-        camzoneoutside = {
-            loc = vec3(290.500, -317.200, 50.500),
-            head = 70,
-            size = vec3(6, 30, 4),
-        },
-        camzoneinside = {
-            loc = vec3(308.449, -279.66, 54.164),
-            head = 157.843,
-            size = vec3(2, 3, 3),
-        },
         secsystemoutside = {
             loc = vec3(311.053, -284.734, 54.364),
             head = 160.00,
@@ -63,18 +55,6 @@ BK.banks  = {
     },
 
     legion = {
-        camera = vec4(129.944, -1029.304, 32.879, 0.00),
-        cameracontrol = vec4(148.750, -1056.645, 29.197, 70.00),
-        camzoneoutside = {
-            loc = vec3(128.855, -1037.911, 29.433),
-            head = 160.00,
-            size = vec3(4, 10, 4),
-        },
-        camzoneinside = {
-            loc = vec3(144.257, -1041.662, 29.367),
-            head = 160,
-            size = vec3(2, 3, 3),
-        },
         secsystemoutside = {
             loc = vec3(146.721, -1046.367, 29.568),
             head = 160.00,
@@ -113,18 +93,6 @@ BK.banks  = {
     },
 
     burton = {
-        camera = vec4(-378.329, -69.841, 48.292, 70.00),
-        cameracontrol = vec4(-340.777, -65.787, 54.585, 70.00),
-        camzoneoutside = {
-            loc = vec3(-365.577, -77.607, 45.661),
-            head = 251.50,
-            size = vec3(10.5, 20, 4),
-        },
-        camzoneinside = {
-            loc = vec3(-356.490, -50.442, 49.035),
-            head = 251.50,
-            size = vec3(2, 3, 3),
-        },
         secsystemoutside = {
             loc = vec3(-354.006, -55.598, 49.236),
             head = 160.00,
@@ -163,18 +131,6 @@ BK.banks  = {
     },
 
     delperro = {
-        camera = vec4(-1221.178, -329.189, 39.564, 130.00),
-        cameracontrol = vec4(-1200.833, -340.266, 37.605, 116.00),
-        camzoneoutside = {
-            loc = vec3(-1215.344, -322.735, 37.705),
-            head = 297.50,
-            size = vec3(8, 10, 4),
-        },
-        camzoneinside = {
-            loc = vec3(-1215.728, -335.750, 37.780),
-            head = 297.50,
-            size = vec3(2, 3, 3),
-        },
         secsystemoutside = {
             loc = vec3(-1210.685, -336.880, 37.981),
             head = 206.00,
@@ -213,18 +169,6 @@ BK.banks  = {
     },
 
     chumash = {
-        camera = vec4(-2964.323, 472.756, 17.851, 60.00),
-        cameracontrol = vec4(-2945.987, 457.920, 15.322, 356.741),
-        camzoneoutside = {
-            loc = vec3(-2955.910, 465.382, 15.163),
-            head = 268.00,
-            size = vec3(12, 10, 4),
-        },
-        camzoneinside = {
-            loc = vec3(-2960.344, 477.557, 15.696),
-            head = 268.00,
-            size = vec3(2, 3, 3),
-        },
         secsystemoutside = {
             loc = vec3(-2956.232, 481.636, 15.897),
             head = 268.00,
@@ -263,18 +207,6 @@ BK.banks  = {
     },
 
     harmony = {
-        camera = vec4(1182.145, 2723.729, 40.334, 248.954),
-        cameracontrol = vec4(1203.571, 2710.286, 38.005, 90.00),
-        camzoneoutside = {
-            loc = vec3(1175.272, 2726.398, 38.004),
-            head = 90.00,
-            size = vec3(8, 10, 4),
-        },
-        camzoneinside = {
-            loc = vec3(1180.370, 2709.863, 38.087),
-            head = 90.00,
-            size = vec3(2, 3, 3),
-        },
         secsystemoutside = {
             loc = vec3(1176.077, 2713.191, 38.288),
             head = 180.00,

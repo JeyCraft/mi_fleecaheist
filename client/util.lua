@@ -43,15 +43,15 @@ UT.mfhblip = function(blip, x, y, z, sprite, color, scale, name)
     EndTextCommandSetBlipName(blip)
 end
 
-UT.mfhroute = function(blip, sprite, color, route, routecolor, scale, name)
-    SetBlipSprite(blip, sprite)
-    SetBlipColour(blip, color)
+UT.mfhroute = function(blip)
+    SetBlipSprite(blip, 250)
+    SetBlipColour(blip, 3)
     SetBlipRoute(blip, true)
-    SetBlipRouteColour(blip, routecolor)
-    SetBlipScale(blip, scale)
+    SetBlipRouteColour(blip, 3)
+    SetBlipScale(blip, 0.7)
     SetBlipAsShortRange(blip, true)
     BeginTextCommandSetBlipName('STRING')
-    AddTextComponentSubstringPlayerName(name)
+    AddTextComponentSubstringPlayerName('Robbery Location')
     EndTextCommandSetBlipName(blip)
 end
 

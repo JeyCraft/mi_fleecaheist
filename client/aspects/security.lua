@@ -53,6 +53,7 @@ local function spawnsecpadzone1(choice)
                 name = 'secpad_hack1',
                 icon = 'fa-solid fa-laptop-file',
                 label = 'Hack Securitypad',
+                items = BK.banks.hack,
                 canInteract = function(_, distance)
                     return distance < 2.0 and not hacked and not failed
                 end,
