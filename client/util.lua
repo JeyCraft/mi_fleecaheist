@@ -23,26 +23,6 @@ UT.mfhremove_obj = function(obj)
     DeleteEntity(obj)
 end
 
-UT.mfhteleport = function(ped, x, y, z, w)
-    DoScreenFadeOut(100)
-    Wait(100)
-    SetEntityCoords(ped, x, y, z, false, false, false, false)
-    SetEntityHeading(ped, w)
-    DoScreenFadeIn(750)
-end
-
-UT.mfhblip = function(blip, x, y, z, sprite, color, scale, name)
-    blip = AddBlipForCoord(x, y, z)
-    SetBlipSprite(blip, sprite)
-    SetBlipDisplay(blip, 4)
-    SetBlipColour(blip, color)
-    SetBlipScale(blip, scale)
-    SetBlipAsShortRange(blip, true)
-    BeginTextCommandSetBlipName('STRING')
-    AddTextComponentSubstringPlayerName(name)
-    EndTextCommandSetBlipName(blip)
-end
-
 UT.mfhroute = function(blip)
     SetBlipSprite(blip, 250)
     SetBlipColour(blip, 3)
@@ -60,4 +40,22 @@ UT.mfhremove_blip = function(blip)
         SetBlipAsMissionCreatorBlip(blip, false)
         RemoveBlip(blip)
     end
+end
+
+UT.mfhnotify = function(id, title, desc)
+    lib.notify({
+        id = id,
+        title = title,
+        description = desc,
+        position = CG.notify.position,
+        style = {
+            backgroundColor = CG.notify.background,
+            color = CG.notify.textcolor,
+            ['.description'] = {
+              color = CG.notify.desccolor
+            }
+        },
+        icon = CG.notify.icon,
+        iconColor = CG.notify.iconcolor
+    })
 end

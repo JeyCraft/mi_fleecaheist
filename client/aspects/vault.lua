@@ -9,7 +9,6 @@ local drillt = {
 }
 local vaultset
 
-
 local function spawnvaultzone(choice)
     local coords = choice.vaultdoor.loc
     local head = choice.vaultdoor.head
@@ -30,9 +29,25 @@ local function spawnvaultzone(choice)
                 end,
                 onSelect = function()
                     TriggerEvent('spawnthermaldrill', choice)
-                    lib.callback('mifh:remove:drill', false, function(source) end)
-                    drilled = true
-                    Wait(5000)
+                    UT.mfhnotify(CG.notify.title, CG.notify.title, CG.notify.description)
+                    if lib.progressBar({
+                        duration = 5000,
+                        label = 'Setting up Drill',
+                        useWhileDead = false,
+                        canCancel = true,
+                        disable = {
+                            car = true,
+                        },
+                        anim = {
+                            dict = 'mini@repair',
+                            clip = 'fixing_a_player'
+                        },
+                    })
+                    then 
+                        lib.callback('mifh:remove:drill', false, function(source) end)
+                        drilled = true
+                    end
+                    Wait(BK.banks.drilltime * 60000)
                     DeleteEntity(drillt.obj)
                     drillt.obj = nil
                     drillt.spawned = false

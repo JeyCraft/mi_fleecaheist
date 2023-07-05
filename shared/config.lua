@@ -20,7 +20,7 @@ CG.start = {
 -- use [https://fontawesome.com/search?m=free&o=r] for icons
 -- use [https://htmlcolorcodes.com] for colors
 CG.notify = {
-    title = 'Spotted by security camera!',
+    title = 'Security Alerted!',
     description = 'The police have been notified',
     position ='top-right',
     background = '#ffffff',

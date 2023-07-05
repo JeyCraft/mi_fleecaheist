@@ -39,6 +39,7 @@ local function spawnmanager(choice)
                     onSelect = function()
                         lib.callback('mifh:give:securitycard', false, function(source)
                             Wait(10)
+                            UT.mfhnotify(CG.notify.title, CG.notify.title, CG.notify.description)
                             exports.ox_target:removeLocalEntity(mngr.ped, { 'mngrdead' })
                         end)
                     end
