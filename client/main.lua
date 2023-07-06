@@ -4,13 +4,17 @@ FH = {}
 FH.chosenbank = nil
 FH.inprogress = false
 
+local blip
+
 local timer = false
 local cool = CG.heistcooldown
-local function cooldown()
+local function cooldown(choice)
     timer = true
     SetTimeout(cool * 60000, function()
         timer = false
         FH.inprogress = false
+        UT.mfhnotify('fleecareset', 'Time limit reached', 'Fleeca systems reset')
+        TriggerEvent('mifh:reset:all', choice)
     end)
 end
 
@@ -37,10 +41,6 @@ local function heiststartloc()
     })
 end
 
-local function loadblip(choice)
-    local blip = AddBlipForCoord(choice.x, choice.y, choice.z)
-    UT.mfhroute(blip)
-end
 
 lib.registerContext({
     id = 'fleecaheist_menu',
@@ -54,13 +54,16 @@ lib.registerContext({
                 if not timer then
                 FH.inprogress = true
                 FH.chosenbank = BK.banks.alta
-                loadblip(FH.chosenbank.vaultdoor.loc)
+                local bloc = FH.chosenbank.vaultdoor.loc
+                blip = AddBlipForCoord(bloc.x, bloc.y, bloc.z)
+                UT.mfhroute(blip)
+                UT.mfhnotify('fleecastart', 'CNS: Bank system isolated', 'time to heist some money')
                 TriggerEvent('mifh:start:mngr', FH.chosenbank)
                 TriggerEvent('mifh:start:security', FH.chosenbank)
                 TriggerEvent('mifh:start:vault', FH.chosenbank)
                 TriggerEvent('mifh:start:trollys', FH.chosenbank)
-                cooldown()
-                --TriggerEvent('mifh:reset:all', FH.chosenbank)
+                cooldown(FH.chosenbank)
+                UT.mfhremove_blip(blip)
                 end
             end,
         },
@@ -71,12 +74,16 @@ lib.registerContext({
             onSelect = function()
                 FH.inprogress = true
                 FH.chosenbank = BK.banks.legion
-                loadblip(FH.chosenbank.vaultdoor.loc)
+                local bloc = FH.chosenbank.vaultdoor.loc
+                blip = AddBlipForCoord(bloc.x, bloc.y, bloc.z)
+                UT.mfhroute(blip)
+                UT.mfhnotify('fleecastart', 'CNS: Bank system isolated', 'time to heist some money')
                 TriggerEvent('mifh:start:mngr', FH.chosenbank)
                 TriggerEvent('mifh:start:security', FH.chosenbank)
                 TriggerEvent('mifh:start:vault', FH.chosenbank)
                 TriggerEvent('mifh:start:trollys', FH.chosenbank)
-                cooldown()
+                cooldown(FH.chosenbank)
+                UT.mfhremove_blip(blip)
             end,
         },
         {
@@ -86,12 +93,16 @@ lib.registerContext({
             onSelect = function()
                 FH.inprogress = true
                 FH.chosenbank = BK.banks.burton
-                loadblip(FH.chosenbank.vaultdoor.loc)
+                local bloc = FH.chosenbank.vaultdoor.loc
+                blip = AddBlipForCoord(bloc.x, bloc.y, bloc.z)
+                UT.mfhroute(blip)
+                UT.mfhnotify('fleecastart', 'CNS: Bank system isolated', 'time to heist some money')
                 TriggerEvent('mifh:start:mngr', FH.chosenbank)
                 TriggerEvent('mifh:start:security', FH.chosenbank)
                 TriggerEvent('mifh:start:vault', FH.chosenbank)
                 TriggerEvent('mifh:start:trollys', FH.chosenbank)
-                cooldown()
+                cooldown(FH.chosenbank)
+                UT.mfhremove_blip(blip)
             end,
         },
         {
@@ -101,12 +112,16 @@ lib.registerContext({
             onSelect = function()
                 FH.inprogress = true
                 FH.chosenbank = BK.banks.delperro
-                loadblip(FH.chosenbank.vaultdoor.loc)
+                local bloc = FH.chosenbank.vaultdoor.loc
+                blip = AddBlipForCoord(bloc.x, bloc.y, bloc.z)
+                UT.mfhroute(blip)
+                UT.mfhnotify('fleecastart', 'CNS: Bank system isolated', 'time to heist some money')
                 TriggerEvent('mifh:start:mngr', FH.chosenbank)
                 TriggerEvent('mifh:start:security', FH.chosenbank)
                 TriggerEvent('mifh:start:vault', FH.chosenbank)
                 TriggerEvent('mifh:start:trollys', FH.chosenbank)
-                cooldown()
+                cooldown(FH.chosenbank)
+                UT.mfhremove_blip(blip)
             end,
         },
         {
@@ -116,12 +131,16 @@ lib.registerContext({
             onSelect = function()
                 FH.inprogress = true
                 FH.chosenbank = BK.banks.chumash
-                loadblip(FH.chosenbank.vaultdoor.loc)
+                local bloc = FH.chosenbank.vaultdoor.loc
+                blip = AddBlipForCoord(bloc.x, bloc.y, bloc.z)
+                UT.mfhroute(blip)
+                UT.mfhnotify('fleecastart', 'CNS: Bank system isolated', 'time to heist some money')
                 TriggerEvent('mifh:start:mngr', FH.chosenbank)
                 TriggerEvent('mifh:start:security', FH.chosenbank)
                 TriggerEvent('mifh:start:vault', FH.chosenbank)
                 TriggerEvent('mifh:start:trollys', FH.chosenbank)
-                cooldown()
+                cooldown(FH.chosenbank)
+                UT.mfhremove_blip(blip)
             end,
         },
         {
@@ -131,12 +150,16 @@ lib.registerContext({
             onSelect = function()
                 FH.inprogress = true
                 FH.chosenbank = BK.banks.harmony
-                loadblip(FH.chosenbank.vaultdoor.loc)
+                local bloc = FH.chosenbank.vaultdoor.loc
+                blip = AddBlipForCoord(bloc.x, bloc.y, bloc.z)
+                UT.mfhroute(blip)
+                UT.mfhnotify('fleecastart', 'CNS: Bank system isolated', 'time to heist some money')
                 TriggerEvent('mifh:start:mngr', FH.chosenbank)
                 TriggerEvent('mifh:start:security', FH.chosenbank)
                 TriggerEvent('mifh:start:vault', FH.chosenbank)
                 TriggerEvent('mifh:start:trollys', FH.chosenbank)
-                cooldown()
+                cooldown(FH.chosenbank)
+                UT.mfhremove_blip(blip)
             end,
         },
     }
@@ -148,6 +171,8 @@ AddEventHandler('mifh:reset:all', function(choice)
     TriggerEvent('mifh:reset:vault', choice)
     TriggerEvent('mifh:reset:trollys', choice)
 end)
+
+--[[
 
 RegisterCommand('breset', function(choice)
     TriggerEvent('mifh:reset:mngr', choice)
@@ -173,6 +198,7 @@ RegisterCommand('bstart2', function()
     TriggerEvent('mifh:start:vault', FH.chosenbank)
     TriggerEvent('mifh:start:trollys', FH.chosenbank)
 end, false)
+]]
 
 Citizen.CreateThread(function()
     if resourceName == GetCurrentResourceName() then

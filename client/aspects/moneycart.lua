@@ -198,6 +198,9 @@ end)
 
 AddEventHandler('mifh:reset:trollys', function(choice)
     UT.mfhremove_obj(trolly1)
+    trollys1.spawned = false
     UT.mfhremove_obj(trolly2)
+    trollys2.spawned = false
     UT.mfhremove_obj(trolly3)
+    trollys3.spawned = false
 end)

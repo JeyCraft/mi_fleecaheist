@@ -113,4 +113,10 @@ end)
 AddEventHandler('mifh:reset:vault', function(choice)
     choice = choice
     exports.ox_target:removeZone(vaultset)
+    DeleteEntity(drillt.obj)
+    TriggerEvent('closevault', choice)
+    drillt.obj = nil
+    drillt.spawned = false
+    vaultopen = false
+    drilled = false
 end)

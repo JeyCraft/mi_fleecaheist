@@ -165,4 +165,8 @@ AddEventHandler('mifh:reset:security', function(choice)
     choice = choice
     exports.ox_target:removeZone(inside)
     exports.ox_target:removeZone(outside)
+    hacked = false
+    failed = false
+    vaultopen = false
+    vaultmoving = false
 end)
