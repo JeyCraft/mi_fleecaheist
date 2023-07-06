@@ -1,12 +1,12 @@
 CG = {}
-CG.debug = true
+CG.debug = false
 
 CG.options = {
     manager = true
 }
 
 -- time before heist can be planned again
-CG.heistcooldown = 2
+CG.heistcooldown = 30
 
 CG.start = {
     loc = vec4(1276.001, -1710.265, 54.771, 297.869),
