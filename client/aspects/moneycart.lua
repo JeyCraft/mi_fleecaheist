@@ -39,11 +39,12 @@ local function spawntrolly1(choice)
                 return distance < 2.5
             end,
             onSelect = function()
+                
                 TriggerEvent('mifh:anim:takemoney', trollys1.obj)
+                exports.ox_target:removeLocalEntity(trollys1.obj, { 'flctrolly1' })
                 Citizen.Wait(37000)
                 lib.callback('mifh:give:moneybag', false, function(source)
                     Wait(10)
-                    exports.ox_target:removeLocalEntity(trollys1.obj, { 'flctrolly1' })
                 end)
             end
         }
@@ -77,10 +78,10 @@ local function spawntrolly2(choice)
             end,
             onSelect = function()
                 TriggerEvent('mifh:anim:takemoney', trollys2.obj)
+                exports.ox_target:removeLocalEntity(trollys2.obj, { 'flctrolly2' })
                 Citizen.Wait(37000)
                 lib.callback('mifh:give:moneybag', false, function(source)
                     Wait(10)
-                    exports.ox_target:removeLocalEntity(trollys2.obj, { 'flctrolly2' })
                 end)
             end
         }
@@ -114,10 +115,10 @@ local function spawntrolly3(choice)
             end,
             onSelect = function()
                 TriggerEvent('mifh:anim:takemoney', trollys3.obj)
+                exports.ox_target:removeLocalEntity(trollys3.obj, { 'flctrolly3' })
                 Citizen.Wait(37000)
                 lib.callback('mifh:give:moneybag', false, function(source)
                     Wait(10)
-                    exports.ox_target:removeLocalEntity(trollys3.obj, { 'flctrolly3' })
                 end)
             end
         }
