@@ -19,10 +19,17 @@
     * Fuck it - Kill the manager for the key card to open the vault
     * Surprise me - I am sure you will think of some crazy shit
 ## Dependencies:
-    * [ox_core](https://github.com/overextended/ox_core) -- maybe needed, idk
-    * [ox_lib](https://github.com/overextended/ox_lib)
-    * [ox_target](https://github.com/overextended/ox_target)
-    * [ox_inventory](https://github.com/overextended/ox_inventory)
+
+[ox_core](https://github.com/overextended/ox_core) -- maybe needed, idk
+
+[ox_lib](https://github.com/overextended/ox_lib)
+
+[ox_target](https://github.com/overextended/ox_target)
+
+[ox_inventory](https://github.com/overextended/ox_inventory)
+
+[k4mb1 drills](https://www.k4mb1maps.com/package/5043926)
+
 If you want to use items / images but don't feel like making them, take a look at my [Ox_Items Template](https://github.com/MIAgimir/Ox_Inventory-ItemsTemplate/releases)
 ## Install
     * Download latest release
