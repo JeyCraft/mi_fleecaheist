@@ -1,5 +1,6 @@
 # M.I. Fleeca Heist
 *ox_core based fleeca heist* | *video coming soon*
+### M.I. Resources Support Discord: [click me](https://discord.gg/XwhBUGErxY)
 
 ## Configurable options:
     * Cooldown system - how long until another fleeca bank can be robbed
