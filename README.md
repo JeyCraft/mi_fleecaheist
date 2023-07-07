@@ -18,7 +18,7 @@
     * Fuck it - Kill the manager for the key card to open the vault
     * Surprise me - I am sure you will think of some crazy shit
 ## Dependencies:
-    * [ox_core](https://github.com/overextended/ox_core) -- I don't think it's needed, it's just the framework I used
+    * [ox_core](https://github.com/overextended/ox_core) -- maybe needed, idk
     * [ox_lib](https://github.com/overextended/ox_lib)
     * [ox_target](https://github.com/overextended/ox_target)
     * [ox_inventory](https://github.com/overextended/ox_inventory)
